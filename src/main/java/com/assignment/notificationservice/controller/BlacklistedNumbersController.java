@@ -6,6 +6,7 @@ import com.assignment.notificationservice.dto.BlacklistedNumbersResponseDTO;
 import com.assignment.notificationservice.dto.GeneralMessageDTO;
 import com.assignment.notificationservice.entity.BlacklistedNumbers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/v1/blacklist")
+@EnableCaching
 public class BlacklistedNumbersController {
     BlacklistedNumbersRepository blacklistedNumbersRepository;
 
