@@ -1,4 +1,4 @@
-package com.assignment.notificationservice.entity;
+package com.assignment.notificationservice.entity.redis;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

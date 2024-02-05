@@ -1,4 +1,4 @@
-package com.assignment.notificationservice.entity;
+package com.assignment.notificationservice.dto.responsedto;
 
 public class SuccessfullySentSmsApiResponse {
     private String phoneNumber;

@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "phoneNumber": {
+      "type": "text"
+    },
+    "message": {
+      "type": "text"
+    },
+    "status": {
+      "type": "text"
+    },
+    "failureCode": {
+      "type": "integer"
+    },
+    "failureComments": {
+      "type": "text"
+    },
+    "createdAt": {
+      "type": "date"
+    },
+    "updatedAt": {
+      "type": "date"
+    }
+  }
+}
