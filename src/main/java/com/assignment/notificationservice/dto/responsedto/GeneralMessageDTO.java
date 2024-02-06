@@ -1,4 +1,4 @@
-package com.assignment.notificationservice.dto;
+package com.assignment.notificationservice.dto.responsedto;
 
 public class GeneralMessageDTO {
     private String data;

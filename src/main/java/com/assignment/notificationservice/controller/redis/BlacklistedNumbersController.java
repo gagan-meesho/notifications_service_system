@@ -1,13 +1,12 @@
-package com.assignment.notificationservice.controller;
+package com.assignment.notificationservice.controller.redis;
 
-import com.assignment.notificationservice.dao.BlacklistedNumbersRepository;
-import com.assignment.notificationservice.dto.BlacklistedNumbersDTO;
-import com.assignment.notificationservice.dto.BlacklistedNumbersResponseDTO;
-import com.assignment.notificationservice.dto.GeneralMessageDTO;
-import com.assignment.notificationservice.entity.BlacklistedNumbers;
+import com.assignment.notificationservice.dao.redis.BlacklistedNumbersRepository;
+import com.assignment.notificationservice.dto.requestbodydto.BlacklistedNumbersDTO;
+import com.assignment.notificationservice.dto.responsedto.BlacklistedNumbersResponseDTO;
+import com.assignment.notificationservice.dto.responsedto.GeneralMessageDTO;
+import com.assignment.notificationservice.entity.redis.BlacklistedNumbers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/v1/blacklist")

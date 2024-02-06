@@ -1,12 +1,11 @@
 package com.assignment.notificationservice.controller;
 
 import com.assignment.notificationservice.dao.SmsRepository;
-import com.assignment.notificationservice.dto.SendSmsResponseDTO;
+import com.assignment.notificationservice.dto.requestbodydto.SendSmsResponseDTO;
 import com.assignment.notificationservice.entity.Request;
-import com.assignment.notificationservice.entity.SuccessfullySentSmsApiResponse;
+import com.assignment.notificationservice.dto.responsedto.SuccessfullySentSmsApiResponse;
 import com.assignment.notificationservice.kafka.KafkaProducer;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
-package com.assignment.notificationservice.dao;
+package com.assignment.notificationservice.dao.redis;
 
-import com.assignment.notificationservice.entity.BlacklistedNumbers;
+import com.assignment.notificationservice.entity.redis.BlacklistedNumbers;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

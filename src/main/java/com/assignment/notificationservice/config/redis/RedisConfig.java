@@ -1,4 +1,4 @@
-package com.assignment.notificationservice.config;
+package com.assignment.notificationservice.config.redis;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
