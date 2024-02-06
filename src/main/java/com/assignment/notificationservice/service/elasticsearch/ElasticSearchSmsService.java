@@ -1,8 +1,7 @@
-package com.assignment.notificationservice.service;
+package com.assignment.notificationservice.service.elasticsearch;
 
 import com.assignment.notificationservice.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.elasticsearch.helper.Indices;
-import com.assignment.notificationservice.elasticsearch.helper.Util;
 import com.assignment.notificationservice.elasticsearch.util.SearchUtil;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,15 +13,12 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.CreateIndexRequest;
-import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.aot.AbstractAotProcessor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
