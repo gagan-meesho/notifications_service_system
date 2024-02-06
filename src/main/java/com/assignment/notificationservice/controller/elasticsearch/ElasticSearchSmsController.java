@@ -2,7 +2,7 @@ package com.assignment.notificationservice.controller.elasticsearch;
 
 import com.assignment.notificationservice.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
-import com.assignment.notificationservice.service.ElasticSearchSmsService;
+import com.assignment.notificationservice.service.elasticsearch.ElasticSearchSmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
