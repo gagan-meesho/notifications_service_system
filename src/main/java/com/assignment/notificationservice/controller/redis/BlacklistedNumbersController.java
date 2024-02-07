@@ -7,6 +7,7 @@ import com.assignment.notificationservice.dto.responsedto.GeneralMessageDTO;
 import com.assignment.notificationservice.entity.redis.BlacklistedNumbers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,8 @@ public class BlacklistedNumbersController {
         this.redisTemplate = redisTemplate;
     }
 
-    private static final String KEY="BLACKLISTED_NUMBER";
+    @Value("${REDIS_KEY}")
+    private String KEY;
     @GetMapping("/")
     public ResponseEntity<BlacklistedNumbersResponseDTO> findAllBlacklistedNumbers(){
         try {
