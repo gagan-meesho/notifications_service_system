@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +35,7 @@ public class SmsController {
     @PostMapping("/send")
     public ResponseEntity<SuccessfullySentSmsApiResponse> sendSmsGivenPhoneNumberAndMessage(@Valid @RequestBody SendSmsResponseDTO sendSmsResponseDTO){
         try {
+            LOGGER.info("Received request to send sms to phone number {} with message {}",sendSmsResponseDTO.getPhoneNumber(),sendSmsResponseDTO.getMessage());
             var phoneNumber = sendSmsResponseDTO.getPhoneNumber();
             var message = sendSmsResponseDTO.getMessage();
             var newSms = new Request(phoneNumber, message, "Sending", null, "");
@@ -46,7 +50,7 @@ public class SmsController {
 //        System.out.println("this is the id bro : "+result.getId());
             kafkaProducer.sendMessage(Integer.toString(result.getId()));
 
-            SmsRequestIndex smsRequestIndex = new SmsRequestIndex(Integer.toString(result.getId()), result.getPhoneNumber(), result.getMessage(), result.getStatus(), result.getFailureCode()==null?"0":Integer.toString(result.getFailureCode()), result.getFailureComments(), result.getCreatedAt(), result.getUpdatedAt());
+            SmsRequestIndex smsRequestIndex = new SmsRequestIndex(Integer.toString(result.getId()), result.getPhoneNumber(), result.getMessage(), result.getStatus(), result.getFailureCode()==null?"0":Integer.toString(result.getFailureCode()), result.getFailureComments(), new Date(result.getCreatedAt().getTime()), new Date(result.getUpdatedAt().getTime()));
             if (elasticSearchSmsService.index(smsRequestIndex)) {
                 LOGGER.info("successfully indexed sms request in elasticsearch");
             } else {
@@ -67,6 +71,12 @@ public class SmsController {
         if(responseToBeSent==null){
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(responseToBeSent);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Request>> getAllSms(){
+        List<Request> responseToBeSent= smsRepository.findAll();
         return ResponseEntity.ok(responseToBeSent);
     }
 

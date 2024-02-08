@@ -1,7 +1,9 @@
 package com.assignment.notificationservice.dto.requestbodydto;
 
 import jakarta.validation.constraints.Size;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SendSmsResponseDTO {
 
     @Size(min=7,max = 10, message="Please enter a valid phone number.")

@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth->
                                 auth.requestMatchers("/v1/**").authenticated()
-                                        .requestMatchers("/auth/login").permitAll()
+                                        .requestMatchers("/auth/login","/showMyLoginPage","/homepage","/sendsmsform","/processSendSms","/showsentsmsdetails","/showblacklistednumbersdetails","/elasticsearchform","/elasticsearchqueryresult").permitAll()
                                         .anyRequest().authenticated()
 
                 ).exceptionHandling(ex->ex.authenticationEntryPoint(point)).sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        #main-content {
+            padding: 20px;
+            text-align: center;
+        }
+        #main-content h2 {
+            margin-bottom: 20px;
+        }
+        #main-content ul {
+            padding: 0;
+            margin: 0;
+        }
+        #main-content ul li {
+            display: inline-block;
+            margin: 10px;
+        }
+        #main-content ul li a {
+            display: block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        #main-content ul li a:hover {
+            background-color: #45a049;
+        }
+        nav ul li a {
+            /*display: block;*/
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <h1>Welcome to Meesho notification service</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<div id="main-content">
+    <h2>What would you like to do?</h2>
+    <ul>
+        <li><a href="/sendsmsform">Send SMS</a></li>
+        <li><a href="#">Get SMS by ID</a></li>
+        <li><a href="#">Blacklist Number</a></li>
+        <li><a href="#">Get Blacklisted Number by ID</a></li>
+    </ul>
+</div>
+
+<footer>
+    <p>&copy; 2024 Meesho notification service system. All rights reserved.</p>
+</footer>
+</body>
+</html>

@@ -50,7 +50,7 @@ public class ElasticSearchSmsService {
     public List<SmsRequestIndex> getAllSmsCreatedSince(final Date date) {
         final SearchRequest request = SearchUtil.buildSearchRequest(
                 Indices.SMS_INDEX,
-                "created",
+                "createdAt",
                 date
         );
 
@@ -107,22 +107,19 @@ public Boolean index(SmsRequestIndex smsRequestIndex) {
 
         final IndexRequest request = new IndexRequest(Indices.SMS_INDEX);
         request.id(String.valueOf(smsRequestIndex.getId()));  // Ensure ID is converted to String
+
         request.source(smsRequestAsString, XContentType.JSON);
 
         LOG.info("Index Request: {}", request);
 
-        final IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+//        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
 
-        if (response != null) {
-            LOG.info("Index Response: {}", response);
-            if (response.status() != null && response.status().equals(RestStatus.CREATED)) {
+        if (request != null) {
                 return true;
             } else {
-                LOG.error("Index request failed. Response status is null or not CREATED.");
+                LOG.error("Index request failed.");
             }
-        } else {
-            LOG.error("Index Response is null.");
-        }
+        return false;
 
     } catch (Exception e) {
         LOG.error("Error indexing SMS request.", e);

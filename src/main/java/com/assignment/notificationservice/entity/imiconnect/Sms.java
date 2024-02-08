@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Getter
 @Setter
-@Component
 public class Sms {
     private String text;
+    public String toString(){
+        return String.format("text : %s",text);
+    }
 }

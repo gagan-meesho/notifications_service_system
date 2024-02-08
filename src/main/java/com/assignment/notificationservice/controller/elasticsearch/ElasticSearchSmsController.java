@@ -29,7 +29,7 @@ public class ElasticSearchSmsController {
         return elasticSearchSmsService.getById(id);
     }
     @PostMapping("/search")
-    public List<SmsRequestIndex> search(@RequestBody final SearchRequestDTO dto) {
+    public List<SmsRequestIndex> search(@RequestBody  SearchRequestDTO dto) {
         return elasticSearchSmsService.search(dto);
     }
 

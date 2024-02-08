@@ -1,10 +1,14 @@
 package com.assignment.notificationservice.elasticsearch;
 
 
+import lombok.ToString;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@ToString
 public class SearchRequestDTO extends PagedRequestDTO {
     private List<String> fields;
     private String searchTerm;

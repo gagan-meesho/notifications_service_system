@@ -10,8 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Msisdn {
     private List<String> msisdn;
     private Integer correlationId;
+    public String toString(){
+        return String.format("msisdn : %s, correlationId : {}",msisdn.get(0),correlationId);
+    }
 }

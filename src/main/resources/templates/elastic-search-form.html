@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Input Form</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Bootstrap Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2>Input Form</h2>
+    <form th:action="@{/elasticsearchqueryresult}" th:object="${searchRequestDTO}" method="post">
+        <!-- Fields List -->
+        <div class="form-group">
+            <label for="fields">Fields:</label>
+            <input type="text" class="form-control" id="fields" name="fields" th:field="${searchRequestDTO.fields}" placeholder="Enter fields">
+        </div>
+        <!-- Search Term -->
+        <div class="form-group">
+            <label for="searchTerm">Search Term:</label>
+            <input type="text" class="form-control" id="searchTerm" name="searchTerm" th:field="${searchRequestDTO.searchTerm}" placeholder="Enter search term">
+        </div>
+        <!-- Sort By -->
+
+        <!-- Page -->
+        <div class="form-group">
+            <label for="page">Page:</label>
+            <input type="number" class="form-control" id="page" name="page" th:field="${searchRequestDTO.page}" placeholder="Enter page number">
+        </div>
+        <!-- Size -->
+        <div class="form-group">
+            <label for="size">Size:</label>
+            <input type="number" class="form-control" id="size" name="size" th:field="${searchRequestDTO.size}" placeholder="Enter page size">
+        </div>
+        <!-- Date -->
+<!--        <div class="form-group">-->
+<!--            <label for="date">Date:</label>-->
+<!--            <div class="input-group date" data-provide="datepicker">-->
+<!--                <input type="text" class="form-control" id="date" name="date" th:field="*{date}" placeholder="Select date">-->
+<!--                <div class="input-group-addon">-->
+<!--                    <span class="glyphicon glyphicon-th"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<!-- Include Bootstrap and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Include Bootstrap Datepicker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Initialize Datepicker -->
+<script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
+    });
+</script>
+</body>
+</html>

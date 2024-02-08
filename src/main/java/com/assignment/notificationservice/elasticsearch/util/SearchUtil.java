@@ -21,10 +21,17 @@ public final class SearchUtil {
             final int size = dto.getSize();
             final int from = page <= 0 ? 0 : page * size;
 
+            final QueryBuilder searchQuery = getQueryBuilder(dto);
+            final QueryBuilder dateQuery = getQueryBuilder("createdAt", dto.getFrom(),dto.getTo());
+
+            final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+                    .must(searchQuery)
+                    .must(dateQuery);
+
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .from(from)
                     .size(size)
-                    .postFilter(getQueryBuilder(dto));
+                    .postFilter(boolQuery);
 
             if (dto.getSortBy() != null) {
                 builder = builder.sort(
@@ -65,7 +72,7 @@ public final class SearchUtil {
                                                    final Date date) {
         try {
             final QueryBuilder searchQuery = getQueryBuilder(dto);
-            final QueryBuilder dateQuery = getQueryBuilder("created", date);
+            final QueryBuilder dateQuery = getQueryBuilder("createdAt", date);
 
             final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
                     .must(searchQuery)
@@ -121,5 +128,9 @@ public final class SearchUtil {
 
     private static QueryBuilder getQueryBuilder(final String field, final Date date) {
         return QueryBuilders.rangeQuery(field).gte(date);
+    }
+
+    private static QueryBuilder getQueryBuilder(final String field, final Date date, final Date date2) {
+        return QueryBuilders.rangeQuery(field).gte(date).lte(date2);
     }
 }
