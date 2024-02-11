@@ -41,12 +41,12 @@
             margin: 0;
         }
         #main-content ul li {
-            display: inline-block;
             margin: 10px;
+            list-style: none;
         }
         #main-content ul li a {
             display: block;
-            padding: 10px 20px;
+            padding: 15px 30px; /* Increased padding to make buttons bigger */
             background-color: #4CAF50;
             color: white;
             text-align: center;
@@ -55,16 +55,6 @@
         }
         #main-content ul li a:hover {
             background-color: #45a049;
-        }
-        nav ul li a {
-            /*display: block;*/
-            padding: 10px 20px;
-            background-color: red;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
         }
         footer {
             background-color: #333;
@@ -92,10 +82,9 @@
 <div id="main-content">
     <h2>What would you like to do?</h2>
     <ul>
-        <li><a href="/sendsmsform">Send SMS</a></li>
-        <li><a href="#">Get SMS by ID</a></li>
-        <li><a href="#">Blacklist Number</a></li>
-        <li><a href="#">Get Blacklisted Number by ID</a></li>
+        <li><a href="/showsentsmsdetails">Take me to Sms section</a></li>
+        <li><a href="/showblacklistednumbersdetails">Take me to Blacklisted numbers section</a></li>
+        <li><a href="/elasticsearchdetails">Take me to Elasticsearch section</a></li>
     </ul>
 </div>
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@ToString
 public class SearchRequestDTO extends PagedRequestDTO {
     private List<String> fields;
     private String searchTerm;
@@ -45,5 +44,9 @@ public class SearchRequestDTO extends PagedRequestDTO {
 
     public void setOrder(SortOrder order) {
         this.order = order;
+    }
+
+    public String toString(){
+        return PagedRequestDTO.class.toString()+" "+fields+" "+searchTerm+" "+sortBy+" "+order;
     }
 }

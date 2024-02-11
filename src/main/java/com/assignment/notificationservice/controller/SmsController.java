@@ -46,11 +46,12 @@ public class SmsController {
                 LOGGER.info(String.format("Failed to updated the sms request in the database. Please try again!"));
                 return ResponseEntity.status(400).body(new SuccessfullySentSmsApiResponse("400","Failed to send sms request"));
             }
-//        System.out.println("this is what i recieved after saving"+ result);
-//        System.out.println("this is the id bro : "+result.getId());
             kafkaProducer.sendMessage(Integer.toString(result.getId()));
 
-            SmsRequestIndex smsRequestIndex = new SmsRequestIndex(Integer.toString(result.getId()), result.getPhoneNumber(), result.getMessage(), result.getStatus(), result.getFailureCode()==null?"0":Integer.toString(result.getFailureCode()), result.getFailureComments(), new Date(result.getCreatedAt().getTime()), new Date(result.getUpdatedAt().getTime()));
+            SmsRequestIndex smsRequestIndex = new SmsRequestIndex(Integer.toString(result.getId()), result.getPhoneNumber(), result.getMessage(), result.getStatus(), result.getFailureCode()==null?"0":Integer.toString(result.getFailureCode()), result.getFailureComments(), result.getCreatedAt(), result.getUpdatedAt());
+
+
+
             if (elasticSearchSmsService.index(smsRequestIndex)) {
                 LOGGER.info("successfully indexed sms request in elasticsearch");
             } else {

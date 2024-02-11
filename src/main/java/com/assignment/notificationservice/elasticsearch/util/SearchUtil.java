@@ -24,9 +24,10 @@ public final class SearchUtil {
             final QueryBuilder searchQuery = getQueryBuilder(dto);
             final QueryBuilder dateQuery = getQueryBuilder("createdAt", dto.getFrom(),dto.getTo());
 
-            final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+             final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
                     .must(searchQuery)
                     .must(dateQuery);
+
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .from(from)
@@ -98,6 +99,34 @@ public final class SearchUtil {
         }
     }
 
+//    private static QueryBuilder getQueryBuilder(final SearchRequestDTO dto) {
+//        if (dto == null) {
+//            return null;
+//        }
+//
+//        final List<String> fields = dto.getFields();
+//        if (CollectionUtils.isEmpty(fields)) {
+//            return null;
+//        }
+//
+//        if (fields.size() > 1) {
+//            final MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(dto.getSearchTerm())
+//                    .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
+//                    .operator(Operator.OR);
+//
+//            fields.forEach(queryBuilder::field);
+//
+//            return queryBuilder;
+//        }
+//
+//        return fields.stream()
+//                .findFirst()
+//                .map(field ->
+//                        QueryBuilders.matchQuery(field, dto.getSearchTerm())
+//                                .operator(Operator.AND))
+//                .orElse(null);
+//    }
+
     private static QueryBuilder getQueryBuilder(final SearchRequestDTO dto) {
         if (dto == null) {
             return null;
@@ -111,7 +140,7 @@ public final class SearchUtil {
         if (fields.size() > 1) {
             final MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(dto.getSearchTerm())
                     .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
-                    .operator(Operator.AND);
+                    .operator(Operator.OR);
 
             fields.forEach(queryBuilder::field);
 
@@ -121,10 +150,10 @@ public final class SearchUtil {
         return fields.stream()
                 .findFirst()
                 .map(field ->
-                        QueryBuilders.matchQuery(field, dto.getSearchTerm())
-                                .operator(Operator.AND))
+                        QueryBuilders.wildcardQuery(field, "*" + dto.getSearchTerm() + "*"))
                 .orElse(null);
     }
+
 
     private static QueryBuilder getQueryBuilder(final String field, final Date date) {
         return QueryBuilders.rangeQuery(field).gte(date);

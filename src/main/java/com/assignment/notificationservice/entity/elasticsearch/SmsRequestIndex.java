@@ -1,6 +1,7 @@
 package com.assignment.notificationservice.entity.elasticsearch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -18,7 +19,6 @@ public class SmsRequestIndex {
 
     public SmsRequestIndex() {
     }
-
     public SmsRequestIndex(String id, String phoneNumber, String message, String status, String failureCode, String failureComments, Date createdAt, Date updatedAt) {
         this.id = id;
         this.phoneNumber = phoneNumber;
@@ -28,6 +28,9 @@ public class SmsRequestIndex {
         this.failureComments = failureComments;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public SmsRequestIndex(String sourceAsString) {
     }
 
     public String getId() {

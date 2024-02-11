@@ -5,22 +5,31 @@ import com.assignment.notificationservice.elasticsearch.helper.Indices;
 import com.assignment.notificationservice.elasticsearch.util.SearchUtil;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.core.TimeValue;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -90,42 +99,48 @@ public class ElasticSearchSmsService {
             return Collections.emptyList();
         }
     }
-public Boolean index(SmsRequestIndex smsRequestIndex) {
-    try {
-        if (smsRequestIndex == null) {
-            LOG.error("SmsRequestIndex is null.");
-            return false;
-        }
+    public Boolean index(SmsRequestIndex smsRequestIndex) {
+        try {
+            if (smsRequestIndex == null) {
+                LOG.error("SmsRequestIndex is null.");
+                return false;
+            }
 
-        final String smsRequestAsString = MAPPER.writeValueAsString(smsRequestIndex);
-        if (smsRequestAsString == null) {
-            LOG.error("Failed to convert SmsRequestIndex to JSON.");
-            return false;
-        }
+            final String smsRequestAsString = MAPPER.writeValueAsString(smsRequestIndex);
+            if (smsRequestAsString == null) {
+                LOG.error("Failed to convert SmsRequestIndex to JSON.");
+                return false;
+            }
 
-        LOG.info("SMS Request as JSON: {}", smsRequestAsString);
+            LOG.info("SMS Request as JSON: {}", smsRequestAsString);
 
-        final IndexRequest request = new IndexRequest(Indices.SMS_INDEX);
-        request.id(String.valueOf(smsRequestIndex.getId()));  // Ensure ID is converted to String
+            final IndexRequest request = new IndexRequest(Indices.SMS_INDEX);
+            request.id(String.valueOf(smsRequestIndex.getId()));
+            request.source(smsRequestAsString, XContentType.JSON);
 
-        request.source(smsRequestAsString, XContentType.JSON);
+            LOG.info("SMS Request : {}", request);
 
-        LOG.info("Index Request: {}", request);
+            // Execute the index request
+            IndexResponse response = client.index(request, RequestOptions.DEFAULT);
 
-//        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
-
-        if (request != null) {
+            // Check if the indexing operation was successful
+            if(! (response.getResult() == DocWriteResponse.Result.CREATED ||
+                    response.getResult() == DocWriteResponse.Result.UPDATED) ){
+                LOG.info("Index request successful.");
                 return true;
             } else {
                 LOG.error("Index request failed.");
+                return false;
             }
-        return false;
 
-    } catch (Exception e) {
-        LOG.error("Error indexing SMS request.", e);
+        } catch (Exception e) {
+            LOG.error("Error indexing SMS request.");
+            return false;
+        }
+
+
     }
-    return false;
-}
+
 
 
     public SmsRequestIndex getById(String id) {
@@ -134,14 +149,15 @@ public Boolean index(SmsRequestIndex smsRequestIndex) {
                     new GetRequest(Indices.SMS_INDEX, id),
                     RequestOptions.DEFAULT
             );
-            if (documentFields == null || documentFields.isSourceEmpty()) {
+            if (documentFields==null||documentFields.isSourceEmpty()){
                 return null;
             }
 
-            return MAPPER.readValue(documentFields.getSourceAsString(), SmsRequestIndex.class);
-        } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
+            return MAPPER.readValue(documentFields.getSourceAsString(),SmsRequestIndex.class);
+        } catch (final Exception e){
+            LOG.error(e.getMessage(),e);
             return null;
         }
     }
+
 }

@@ -1,7 +1,12 @@
 package com.assignment.notificationservice.dto.requestbodydto;
 
+import lombok.ToString;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
+@ToString
 public class BlacklistedNumbersDTO {
     List<String> phoneNumbers;
 
