@@ -39,6 +39,6 @@ public class Config extends AbstractElasticsearchConfiguration {
                             );
                     return httpAsyncClientBuilder;
                 }));
-        return  client;
+        return client;
     }
 }

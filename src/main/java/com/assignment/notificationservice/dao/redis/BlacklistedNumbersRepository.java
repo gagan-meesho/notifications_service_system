@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface BlacklistedNumbersRepository extends JpaRepository<BlacklistedNumbers,Integer> {
+public interface BlacklistedNumbersRepository extends JpaRepository<BlacklistedNumbers, Integer> {
 
     @Query("SELECT bn.phoneNumber FROM BlacklistedNumbers bn")
     List<String> getAllBlacklistedPhoneNumbers();

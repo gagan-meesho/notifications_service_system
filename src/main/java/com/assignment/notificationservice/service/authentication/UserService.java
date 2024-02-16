@@ -8,14 +8,15 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private List<User> store=new ArrayList<>();
+    private final List<User> store = new ArrayList<>();
 
     public UserService() {
-        store.add(new User("1","gagan1","gagan1@gmail.com"));
-        store.add(new User("2","gagan2","gagan2@gmail.com"));
-        store.add(new User("3","gagan3","gagan3@gmail.com"));
+        store.add(new User("1", "gagan1", "gagan1@gmail.com"));
+        store.add(new User("2", "gagan2", "gagan2@gmail.com"));
+        store.add(new User("3", "gagan3", "gagan3@gmail.com"));
     }
-    public List<User> getAllUsers(){
+
+    public List<User> getAllUsers() {
         return store;
     }
 }

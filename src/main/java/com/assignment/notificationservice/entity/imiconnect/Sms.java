@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 @Setter
 public class Sms {
     private String text;
-    public String toString(){
-        return String.format("text : %s",text);
+
+    public String toString() {
+        return String.format("text : %s", text);
     }
 }

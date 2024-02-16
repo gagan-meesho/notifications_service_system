@@ -8,7 +8,7 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
     @Bean
-    public NewTopic createNewTopic(){
+    public NewTopic createNewTopic() {
         return TopicBuilder.name("notification.send_sms").build();
     }
 }

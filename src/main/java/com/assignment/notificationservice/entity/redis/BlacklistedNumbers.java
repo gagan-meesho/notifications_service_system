@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Value;
 
 @Entity
-@Table(name="blacklisted_numbers")
+@Table(name = "blacklisted_numbers")
 public class BlacklistedNumbers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

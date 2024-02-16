@@ -19,6 +19,7 @@ public class SmsRequestIndex {
 
     public SmsRequestIndex() {
     }
+
     public SmsRequestIndex(String id, String phoneNumber, String message, String status, String failureCode, String failureComments, Date createdAt, Date updatedAt) {
         this.id = id;
         this.phoneNumber = phoneNumber;

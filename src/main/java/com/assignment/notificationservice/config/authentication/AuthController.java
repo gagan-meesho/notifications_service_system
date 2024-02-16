@@ -1,9 +1,9 @@
 package com.assignment.notificationservice.config.authentication;
 
 
-import com.assignment.notificationservice.security.JwtHelper;
-import com.assignment.notificationservice.entity.authentication.JwtRequest;
-import com.assignment.notificationservice.entity.authentication.JwtResponse;
+import com.assignment.notificationservice.helper.authentication.JwtHelper;
+import com.assignment.notificationservice.dto.requestDTO.authentication.JwtRequest;
+import com.assignment.notificationservice.dto.responseDTO.authentication.JwtResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class AuthController {
     @Autowired
     private JwtHelper helper;
 
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
     @PostMapping("/login")
