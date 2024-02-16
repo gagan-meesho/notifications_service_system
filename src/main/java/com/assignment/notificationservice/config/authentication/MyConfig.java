@@ -24,7 +24,7 @@ class MyConfig {
                 username("user2")
                 .password(passwordEncoder().encode("password")).roles("ADMIN").
                 build();
-        return new InMemoryUserDetailsManager(userDetails1,userDetails2);
+        return new InMemoryUserDetailsManager(userDetails1, userDetails2);
     }
 
     @Bean

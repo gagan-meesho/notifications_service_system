@@ -20,45 +20,46 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.http.*;
 
 @RestController
 @RequestMapping("/v1/sms")
 public class ImiConnectController {
-    private Logger LOGGER = LoggerFactory.getLogger(ImiConnectController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ImiConnectController.class);
     ObjectMapper oj = new ObjectMapper();
 
 
     @Value("${IMI_API_KEY}")
     private String IMI_API_KEY;
+
     @PostMapping("/sendimi")
-    public void sendImi(){
-         ImiConnectRequest imiConnectRequest = new ImiConnectRequest("sms",
+    public void sendImi() {
+        ImiConnectRequest imiConnectRequest = new ImiConnectRequest("sms",
                 new Channels(new Sms(
                         "hi this is some message")
                 ),
-                Arrays.asList(
-                        new Msisdn(Arrays.asList("+918123070802"),1)
+                List.of(
+                        new Msisdn(List.of("+918123070802"), 1)
                 )
         );
-         LOGGER.info("body of imirequest is : {}",imiConnectRequest);
+        LOGGER.info("body of imirequest is : {}", imiConnectRequest);
 
-         try {
-             RestTemplate restTemplate = new RestTemplate();
-             HttpHeaders headers = new HttpHeaders();
-             headers.setContentType(MediaType.APPLICATION_JSON);
-             headers.set("key", IMI_API_KEY);
-             HttpEntity<ImiConnectRequest> httpEntity = new HttpEntity<ImiConnectRequest>(imiConnectRequest, headers);
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("key", IMI_API_KEY);
+            HttpEntity<ImiConnectRequest> httpEntity = new HttpEntity<ImiConnectRequest>(imiConnectRequest, headers);
 
 
-             ResponseEntity<FinalResponse> responseEntity = restTemplate.exchange("https://api.imiconnect.in/resources/v1/messaging", HttpMethod.POST, httpEntity, FinalResponse.class);
-             FinalResponse response = responseEntity.getBody();
-             LOGGER.info("imi connect Response is {}", oj.writeValueAsString(response));
-         }
-         catch (Exception e){
-             LOGGER.error(String.valueOf(e));
-         }
+            ResponseEntity<FinalResponse> responseEntity = restTemplate.exchange("https://api.imiconnect.in/resources/v1/messaging", HttpMethod.POST, httpEntity, FinalResponse.class);
+            FinalResponse response = responseEntity.getBody();
+            LOGGER.info("imi connect Response is {}", oj.writeValueAsString(response));
+        } catch (Exception e) {
+            LOGGER.error(String.valueOf(e));
+        }
 
     }
 }

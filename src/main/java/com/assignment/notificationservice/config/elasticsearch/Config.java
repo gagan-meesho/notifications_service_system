@@ -1,5 +1,8 @@
 package com.assignment.notificationservice.config.elasticsearch;
 
+import org.apache.http.HttpHost;
+import org.apache.http.impl.nio.reactor.IOReactorConfig;
+import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +24,21 @@ public class Config extends AbstractElasticsearchConfiguration {
     @Bean
     @Override
     public RestHighLevelClient elasticsearchClient() {
-        final ClientConfiguration config = ClientConfiguration.builder()
-                .connectedTo(elasticsearchUrl)
-                .build();
-
-        return RestClients.create(config).rest();
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200)
+                ).setHttpClientConfigCallback(httpAsyncClientBuilder -> {
+                    httpAsyncClientBuilder
+                            .setMaxConnTotal(20)
+                            .setMaxConnPerRoute(10)
+                            .setDefaultIOReactorConfig(
+                                    IOReactorConfig
+                                            .custom()
+                                            .setIoThreadCount(20)
+                                            .build()
+                            );
+                    return httpAsyncClientBuilder;
+                }));
+        return client;
     }
 }

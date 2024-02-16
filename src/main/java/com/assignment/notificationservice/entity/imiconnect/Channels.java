@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Channels {
     private Sms sms;
+
+    public String toString() {
+        return String.format(" sms : %s", sms.toString());
+    }
 }

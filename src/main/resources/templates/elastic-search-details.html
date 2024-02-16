@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="button-container">
+    <button onclick="window.location.href='/elasticsearchform'">Search in Elasticsearch</button>
+    <button onclick="window.location.href='/homepage'">Return to Homepage</button>
+</div>
+<h2>These are the documents indexed in elastic search as of now:</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Phone Number</th>
+        <th>Message</th>
+        <th>Status</th>
+        <th>Failure Code</th>
+        <th>Failure Comments</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterate over the list of Request objects -->
+    <tr th:each="request : ${result}">
+        <!-- Access the ID and Phone Number fields of each Request object -->
+        <td th:text="${request.id}"></td>
+        <td th:text="${request.phoneNumber}"></td>
+        <td th:text="${request.message}"></td>
+        <td th:text="${request.status}"></td>
+        <td th:text="${request.failureCode}"></td>
+        <td th:text="${request.failureComments}"></td>
+        <td th:text="${request.createdAt}"></td>
+        <td th:text="${request.updatedAt}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

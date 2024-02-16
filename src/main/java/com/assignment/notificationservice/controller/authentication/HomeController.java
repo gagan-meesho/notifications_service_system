@@ -22,11 +22,12 @@ public class HomeController {
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @GetMapping("/users")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
     @GetMapping("/current-user")
-    public Principal getCurrentUser(Principal principal){
+    public Principal getCurrentUser(Principal principal) {
         return principal;
     }
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Failure Page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #dc3545; /* Red background color */
+            font-family: Arial, sans-serif;
+        }
+
+        .failure-container {
+            margin-top: 50px;
+            text-align: center;
+            color: #fff; /* White text color */
+        }
+
+        .return-link {
+            color: #fff; /* White link color */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .return-link:hover {
+            text-decoration: underline; /* Add underline on hover */
+        }
+    </style>
+</head>
+
+<body>
+<div class="container failure-container">
+    <h1>FAILURE</h1>
+    <p>Something went wrong!</p>
+    <a href="/homepage" class="return-link">Return to Home Page</a>
+</div>
+</body>
+</html>

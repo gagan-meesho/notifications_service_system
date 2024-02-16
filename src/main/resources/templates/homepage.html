@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        #main-content {
+            padding: 20px;
+            text-align: center;
+        }
+        #main-content h2 {
+            margin-bottom: 20px;
+        }
+        #main-content ul {
+            padding: 0;
+            margin: 0;
+        }
+        #main-content ul li {
+            margin: 10px;
+            list-style: none;
+        }
+        #main-content ul li a {
+            display: block;
+            padding: 15px 30px; /* Increased padding to make buttons bigger */
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        #main-content ul li a:hover {
+            background-color: #45a049;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <h1>Welcome to Meesho notification service</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<div id="main-content">
+    <h2>What would you like to do?</h2>
+    <ul>
+        <li><a href="/showsentsmsdetails">Take me to Sms section</a></li>
+        <li><a href="/showblacklistednumbersdetails">Take me to Blacklisted numbers section</a></li>
+        <li><a href="/elasticsearchdetails">Take me to Elasticsearch section</a></li>
+    </ul>
+</div>
+
+<footer>
+    <p>&copy; 2024 Meesho notification service system. All rights reserved.</p>
+</footer>
+</body>
+</html>

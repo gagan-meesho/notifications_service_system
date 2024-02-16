@@ -1,6 +1,6 @@
 package com.assignment.notificationservice;
 
-import com.assignment.notificationservice.elasticsearch.SearchRequestDTO;
+import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.service.elasticsearch.ElasticSearchSmsService;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
