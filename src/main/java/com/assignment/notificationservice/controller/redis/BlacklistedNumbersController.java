@@ -5,6 +5,9 @@ import com.assignment.notificationservice.dto.requestDTO.redis.BlacklistedNumber
 import com.assignment.notificationservice.dto.responseDTO.redis.BlacklistedNumbersResponseDTO;
 import com.assignment.notificationservice.dto.responseDTO.api.GeneralMessageDTO;
 import com.assignment.notificationservice.entity.redis.BlacklistedNumbers;
+import com.assignment.notificationservice.exception.InternalServerErrorException;
+import com.assignment.notificationservice.exception.RedisInteralServerErrorException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +23,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/blacklist")
 @EnableCaching
+@Slf4j
 public class BlacklistedNumbersController {
     BlacklistedNumbersRepository blacklistedNumbersRepository;
     RedisTemplate redisTemplate;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BlacklistedNumbersController.class);
-
 
     public BlacklistedNumbersController(BlacklistedNumbersRepository blacklistedNumbersRepository, RedisTemplate redisTemplate) {
         this.blacklistedNumbersRepository = blacklistedNumbersRepository;
@@ -36,64 +37,61 @@ public class BlacklistedNumbersController {
     private String KEY;
 
     @GetMapping("/")
-    public ResponseEntity<BlacklistedNumbersResponseDTO> findAllBlacklistedNumbers() {
+    public ResponseEntity<BlacklistedNumbersResponseDTO> findAllBlacklistedNumbers() throws RedisInteralServerErrorException {
+        log.debug("Retrieving all blacklisted numbers");
         try {
-            LOGGER.info("Retrieving all blacklisted numbers");
             List<String> result = redisTemplate.opsForHash().values(KEY);
-            LOGGER.info("Retrieved {} blacklisted numbers successfully", result.size());
+            log.debug("Retrieved {} blacklisted numbers successfully", result.size());
             return ResponseEntity.ok(new BlacklistedNumbersResponseDTO(result));
         } catch (Exception e) {
-            LOGGER.error("Error occurred while retrieving blacklisted numbers", e);
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BlacklistedNumbersResponseDTO(new ArrayList<>()));
+            log.error("Error occurred while retrieving blacklisted numbers from redis", e);
+           throw new RedisInteralServerErrorException("Error occurred while retrieving blacklisted numbers");
         }
     }
 
     @PostMapping("/")
-    public ResponseEntity<GeneralMessageDTO> addNewNumbersToBlacklistedNumbers(@RequestBody BlacklistedNumbersDTO blacklistedNumbersDTO) {
-        var phoneNumbers = blacklistedNumbersDTO.getPhoneNumbers();
-//        System.out.println("here are your phone numbers dude "+ phoneNumbers);
-        LOGGER.info(String.format("The list of numbers recieved to be blacklisted : %s", phoneNumbers.toString()));
-
-        for (var phoneNumber : phoneNumbers) {
+    public ResponseEntity<BlacklistedNumbersResponseDTO> addNewNumbersToBlacklistedNumbers(@RequestBody BlacklistedNumbersDTO blacklistedNumbersDTO) throws RedisInteralServerErrorException {
+        List<String> phoneNumbers = blacklistedNumbersDTO.getPhoneNumbers();
+        log.debug(String.format("The list of numbers recieved to be blacklisted : %s", phoneNumbers.toString()));
+        List<String> successfullyBlacklistedNumbers=new ArrayList<>();
+        for (String phoneNumber : phoneNumbers) {
             try {
                 if (redisTemplate.opsForHash().hasKey(KEY, phoneNumber)) {
-//                    System.out.println("this phone number already exists bro "+phoneNumber);
-                    LOGGER.info("Phone number %s is already blocked.", phoneNumber);
+                    log.debug("Phone number %s is already blocked.", phoneNumber);
                     continue;
                 }
                 redisTemplate.opsForHash().put(KEY, phoneNumber, phoneNumber);
-                LOGGER.info("Added phone number %s to redis blacklisted list.", phoneNumber);
+                log.debug("Added phone number %s to redis blacklisted list.", phoneNumber);
                 var blacklistedNumber = new BlacklistedNumbers(phoneNumber);
                 blacklistedNumbersRepository.save(blacklistedNumber);
-                LOGGER.info("Added phone number %s to blacklisted database.", phoneNumber);
+                log.debug("Added phone number %s to blacklisted database.", phoneNumber);
+                successfullyBlacklistedNumbers.add(phoneNumber);
             } catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralMessageDTO("false"));
+                throw new RedisInteralServerErrorException("Error while adding number to redis");
             }
         }
-        return ResponseEntity.ok(new GeneralMessageDTO("Successfully blacklisted"));
+        return ResponseEntity.ok(new BlacklistedNumbersResponseDTO(successfullyBlacklistedNumbers));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<GeneralMessageDTO> deleteNumbersFromBlacklistedNumbers(@RequestBody BlacklistedNumbersDTO blacklistedNumbersDTO) {
-        var phoneNumbers = blacklistedNumbersDTO.getPhoneNumbers();
-        System.out.println("here are your phone numbers" + phoneNumbers);
-        for (var phoneNumber : phoneNumbers) {
+    public ResponseEntity<BlacklistedNumbersResponseDTO> deleteNumbersFromBlacklistedNumbers(@RequestBody BlacklistedNumbersDTO blacklistedNumbersDTO) throws RedisInteralServerErrorException {
+        List<String> phoneNumbers = blacklistedNumbersDTO.getPhoneNumbers();
+        List<String> successfullyBlacklistedNumbers = new ArrayList<>();
+        for (String phoneNumber : phoneNumbers) {
             try {
                 if (!redisTemplate.opsForHash().hasKey(KEY, phoneNumber)) {
-                    LOGGER.info(String.format("Phone number %s doesn't exist in the database.", phoneNumber));
+                    log.debug("Phone number {} doesn't exist in the database.",phoneNumber);
                     continue;
                 }
                 redisTemplate.opsForHash().delete(KEY, phoneNumber);
-                LOGGER.info(String.format("Deleted phone number %s from redis.", phoneNumber));
+                log.debug(String.format("Deleted phone number %s from redis.", phoneNumber));
                 blacklistedNumbersRepository.deleteSpecificPhoneNumber(phoneNumber);
-                LOGGER.info(String.format("Deleted phone number %s from databse.", phoneNumber));
+                log.debug(String.format("Deleted phone number %s from databse.", phoneNumber));
+                successfullyBlacklistedNumbers.add(phoneNumber);
             } catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralMessageDTO("bad request"));
+               throw new RedisInteralServerErrorException("Error while deleting number from redis");
             }
         }
-        return ResponseEntity.ok(new GeneralMessageDTO("Successfully deleted"));
+        return ResponseEntity.ok(new BlacklistedNumbersResponseDTO(successfullyBlacklistedNumbers));
     }
 }

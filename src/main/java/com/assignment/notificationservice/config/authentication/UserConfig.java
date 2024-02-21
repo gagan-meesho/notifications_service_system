@@ -13,7 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
-class MyConfig {
+class UserConfig {
+    //TODO
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails userDetails1 = User.builder().
@@ -26,12 +27,10 @@ class MyConfig {
                 build();
         return new InMemoryUserDetailsManager(userDetails1, userDetails2);
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
         return builder.getAuthenticationManager();

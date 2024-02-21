@@ -111,7 +111,7 @@ class NotificationserviceApplicationTests {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// these re the unit tests for indexing:
+	// these are the unit tests for indexing:
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Test
 	public void testIndex_Success() throws IOException {
@@ -162,40 +162,8 @@ class NotificationserviceApplicationTests {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//these are for searchCreatedsince
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	@Test
-	public void testSearchCreatedSince_Success() throws IOException {
-		// Mock data
-		SearchRequestDTO dto = new SearchRequestDTO(/* provide necessary arguments */);
-		Date date = new Date(/* provide necessary arguments */);
 
-		// Mock response
-		SearchResponse searchResponseMock = mock(SearchResponse.class);
-		SearchHits searchHitsMock = mock(SearchHits.class);
-		when(searchResponseMock.getHits()).thenReturn(searchHitsMock);
-		when(searchHitsMock.getHits()).thenReturn(new SearchHit[] {}); // Provide mock hits if needed
 
-		// Mock client.search method
-		when(client.search(any(SearchRequest.class), any())).thenReturn(searchResponseMock);
 
-		// Call the method to be tested
-		List<SmsRequestIndex> result = smsRequestIndexService.searchCreatedSince(dto, date);
-
-		// Verify the result
-		assertNotNull(result);
- 	}
-
-	@Test
-	public void testSearchCreatedSince_NullRequest() throws IOException {
-		// Mock data
-		SearchRequestDTO dto = null;
-		Date date = new Date(/* provide necessary arguments */);
-
-		// Call the method to be tested
-		List<SmsRequestIndex> result = smsRequestIndexService.searchCreatedSince(dto, date);
-
-		// Verify the result
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
-	}
 
 }

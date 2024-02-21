@@ -25,9 +25,7 @@ public class Config extends AbstractElasticsearchConfiguration {
     @Override
     public RestHighLevelClient elasticsearchClient() {
         RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200)
-                ).setHttpClientConfigCallback(httpAsyncClientBuilder -> {
+                RestClient.builder(new HttpHost("localhost", 9200)).setHttpClientConfigCallback(httpAsyncClientBuilder -> {
                     httpAsyncClientBuilder
                             .setMaxConnTotal(20)
                             .setMaxConnPerRoute(10)
