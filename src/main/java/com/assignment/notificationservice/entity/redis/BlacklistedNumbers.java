@@ -2,7 +2,6 @@ package com.assignment.notificationservice.entity.redis;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 @Table(name = "blacklisted_numbers")

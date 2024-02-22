@@ -1,14 +1,13 @@
 package com.assignment.notificationservice.dto.requestDTO.elasticsearch;
 
 
-import com.assignment.notificationservice.dto.requestDTO.elasticsearch.PagedRequestDTO;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class SearchRequestDTO extends PagedRequestDTO {
+public class SearchRequestDTO extends PagedRequestDTO{
     private List<String> fields;
     private String searchTerm;
     private String sortBy;

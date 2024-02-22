@@ -1,5 +1,6 @@
 package com.assignment.notificationservice.dto.requestDTO.sql;
 
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Component;
 public class SendSmsResponseDTO {
 
     @Size(min = 7, max = 10, message = "Please enter a valid phone number.")
+    @Pattern(regexp = "^[0-9]+$", message = "Phone number should only contain digits (0-9).")
     private String phoneNumber;
     @Size(min = 1, message = "message cannot be empty.")
     private String message;
-
     public SendSmsResponseDTO() {
     }
 

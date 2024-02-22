@@ -1,9 +1,9 @@
 package com.assignment.notificationservice.dto.responseDTO.sql;
 
 public class SendSmsApiResponse {
-    private String phoneNumber;
+    protected String phoneNumber;
 
-    private String message;
+    protected String message;
 
     public SendSmsApiResponse() {
     }

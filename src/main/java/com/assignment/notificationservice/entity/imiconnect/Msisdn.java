@@ -1,8 +1,9 @@
 package com.assignment.notificationservice.entity.imiconnect;
 
-import lombok.*;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 

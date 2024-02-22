@@ -1,11 +1,11 @@
-package com.assignment.notificationservice.config.authentication;
+package com.assignment.notificationservice.controller.authentication.auth;
 
 
-import com.assignment.notificationservice.helper.authentication.JwtHelper;
 import com.assignment.notificationservice.dto.requestDTO.authentication.JwtRequest;
 import com.assignment.notificationservice.dto.responseDTO.authentication.JwtResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.assignment.notificationservice.exception.CustomException;
+import com.assignment.notificationservice.helper.authentication.JwtHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -26,11 +27,8 @@ public class AuthController {
     @Autowired
     private AuthenticationManager manager;
 
-
     @Autowired
     private JwtHelper helper;
-
-    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
     @PostMapping("/login")
@@ -49,18 +47,13 @@ public class AuthController {
     }
 
     private void doAuthenticate(String email, String password) {
-
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
             manager.authenticate(authentication);
-
-
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException(" Invalid Username or Password  !!");
+             throw new CustomException(" Invalid Username or Password  !!");
         }
-
     }
-
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
         return "Credentials Invalid !!";
