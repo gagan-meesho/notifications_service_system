@@ -14,7 +14,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 class UserConfig {
-    //TODO
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails userDetails1 = User.builder().

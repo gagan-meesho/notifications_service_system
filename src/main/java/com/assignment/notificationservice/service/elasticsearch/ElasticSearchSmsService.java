@@ -1,29 +1,29 @@
 package com.assignment.notificationservice.service.elasticsearch;
 
-import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.constants.elasticsearch.ElasticsearchConstants;
+import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
+import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
 import com.assignment.notificationservice.exception.CustomIOException;
 import com.assignment.notificationservice.helper.elasticsearch.SearchBuilderHelper;
-import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.search.SearchHit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -39,13 +39,9 @@ public class ElasticSearchSmsService {
     }
 
     public List<SmsRequestIndex> search(final SearchRequestDTO dto) throws IOException{
-            log.debug("Building search request for DTO: {}", dto); 
             final SearchRequest request = SearchBuilderHelper.buildSearchRequest(ElasticsearchConstants.SMS_INDEX, dto);
-            log.debug("Search request built successfully: {}", request.toString()); 
-
             return searchInternal(request);
     }
-    
 
     private List<SmsRequestIndex> searchInternal(final SearchRequest request)  {
         if (Objects.isNull(request)) {
@@ -70,8 +66,8 @@ public class ElasticSearchSmsService {
 
     }
 
-    public Boolean index(SmsRequestIndex smsRequestIndex) {
-        try {
+    public Boolean index(SmsRequestIndex smsRequestIndex) throws Exception {
+
             if (smsRequestIndex == null) {
                 log.error("SmsRequestIndex is null.");
                 return false;
@@ -82,39 +78,34 @@ public class ElasticSearchSmsService {
                 return false;
             }
 
-            log.debug("SMS Request as JSON: {}", smsRequestAsString);
 
             final IndexRequest request = new IndexRequest(ElasticsearchConstants.SMS_INDEX);
             request.id(String.valueOf(smsRequestIndex.getId()));
             request.source(smsRequestAsString, XContentType.JSON);
 
-            log.debug("SMS Request : {}", request);
-
+        try {
             client.index(request, RequestOptions.DEFAULT);
 
             return true;
         }catch (Exception e){
-            log.debug("exception occured while indexing.");
+            log.error("exception occured while indexing.");
             return false;
         }
     }
     
     public SmsRequestIndex getById(String id) {
         try {
-            log.debug("Fetching SMS request by ID: {}", id);
             final GetResponse documentFields = client.get(
                     new GetRequest(ElasticsearchConstants.SMS_INDEX, id),
                     RequestOptions.DEFAULT
             );
             if (Objects.isNull(documentFields) || documentFields.isSourceEmpty()) {
-                log.debug("SMS request with ID {} not found", id);
                 return null;
             }
             SmsRequestIndex smsRequestIndex = mapper.readValue(documentFields.getSourceAsString(), SmsRequestIndex.class);
-            log.debug("SMS request with ID {} fetched successfully", id);
             return smsRequestIndex;
         } catch (final Exception e) {
-            log.error("Error fetching SMS request with ID " + id, e);
+            log.error("Error fetching SMS request with ID " + id);
             return null;
         }
     }

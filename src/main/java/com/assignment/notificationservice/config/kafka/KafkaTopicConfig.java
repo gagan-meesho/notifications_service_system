@@ -12,4 +12,8 @@ public class KafkaTopicConfig {
     public NewTopic createNewTopic() {
         return TopicBuilder.name(KafkaConstants.KAFKA_TOPIC_NAME).build();
     }
+    @Bean
+    public NewTopic createNewDltTopic() {
+        return TopicBuilder.name(KafkaConstants.KAFKA_DLT_TOPIC_NAME).build();
+    }
 }

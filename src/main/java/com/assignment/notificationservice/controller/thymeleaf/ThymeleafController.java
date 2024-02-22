@@ -8,7 +8,7 @@ import com.assignment.notificationservice.dto.responseDTO.redis.BlacklistedNumbe
 import com.assignment.notificationservice.dto.responseDTO.api.GeneralMessageDTO;
 import com.assignment.notificationservice.dto.responseDTO.sql.SendSmsApiResponse;
 import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
-import com.assignment.notificationservice.entity.sql.Request;
+import com.assignment.notificationservice.entity.sql.Sms;
 import com.assignment.notificationservice.dto.requestDTO.authentication.JwtRequest;
 import com.assignment.notificationservice.dto.responseDTO.authentication.JwtResponse;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
@@ -231,19 +231,19 @@ public class ThymeleafController {
         System.out.println("in show sent sms details");
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<Request>> responseEntity = restTemplate.exchange(
+        ResponseEntity<List<Sms>> responseEntity = restTemplate.exchange(
                 "http://localhost:8080/v1/sms",
                 HttpMethod.GET,
                 httpEntity,
-                new ParameterizedTypeReference<List<Request>>() {
+                new ParameterizedTypeReference<List<Sms>>() {
                 }
         );
 
 // Extract the list of Request objects from the ResponseEntity
-        List<Request> requestList = responseEntity.getBody();
-        System.out.println("sms details " + requestList);
-        model.addAttribute("requestList", requestList);
-        System.out.println(requestList);
+        List<Sms> smsList = responseEntity.getBody();
+        System.out.println("sms details " + smsList);
+        model.addAttribute("requestList", smsList);
+        System.out.println(smsList);
         return "sms-details";
     }
 
@@ -363,18 +363,18 @@ public class ThymeleafController {
 
     @GetMapping("/showsmsupdateform/{id}")
     public String showSmsUpdateForm(@PathVariable("id") String id, Model model) {
-        Optional<Request> result = smsRepository.findById(Integer.parseInt(id));
-        Request request = result.get();
-        model.addAttribute("request", request);
+        Optional<Sms> result = smsRepository.findById(Integer.parseInt(id));
+        Sms sms = result.get();
+        model.addAttribute("request", sms);
         return "update-sms-form";
     }
 
     @PostMapping("/updatesms")
-    public String updateSmsDetails(@Valid @ModelAttribute("request") Request request, BindingResult bindingResult) {
+    public String updateSmsDetails(@Valid @ModelAttribute("request") Sms sms, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "update-sms-form";
         }
-        var result = smsRepository.save(request);
+        var result = smsRepository.save(sms);
         return result != null ? "success" : "failure";
     }
 

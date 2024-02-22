@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sms_requests")
-public class Request {
+public class Sms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,10 +30,10 @@ public class Request {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
 
-    public Request() {
+    public Sms() {
     }
 
-    public Request(String phoneNumber, String message, String status, Integer failureCode, String failureComments) {
+    public Sms(String phoneNumber, String message, String status, Integer failureCode, String failureComments) {
         this.phoneNumber = phoneNumber;
         this.message = message;
         this.status = status;

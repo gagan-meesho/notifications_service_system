@@ -16,7 +16,7 @@ public class Util {
 
             return new String(Files.readAllBytes(resource.toPath()));
         } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Failed to load resource as string.");
             return null;
         }
     }

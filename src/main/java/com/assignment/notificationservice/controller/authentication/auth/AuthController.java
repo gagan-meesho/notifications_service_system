@@ -1,13 +1,11 @@
 package com.assignment.notificationservice.controller.authentication.auth;
 
 
-import com.assignment.notificationservice.exception.CustomException;
-import com.assignment.notificationservice.helper.authentication.JwtHelper;
 import com.assignment.notificationservice.dto.requestDTO.authentication.JwtRequest;
 import com.assignment.notificationservice.dto.responseDTO.authentication.JwtResponse;
+import com.assignment.notificationservice.exception.CustomException;
+import com.assignment.notificationservice.helper.authentication.JwtHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +51,7 @@ public class AuthController {
         try {
             manager.authenticate(authentication);
         } catch (BadCredentialsException e) {
-            throw new CustomException(" Invalid Username or Password  !!");
+             throw new CustomException(" Invalid Username or Password  !!");
         }
     }
     @ExceptionHandler(BadCredentialsException.class)

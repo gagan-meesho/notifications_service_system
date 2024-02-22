@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //Authorization
 
         String requestHeader = request.getHeader("Authorization");
+        logger.info("request : {}",request);
         //Bearer 2352345235sdfrsfgsdfsdf
         logger.info(" Header :  {}", requestHeader);
         String username = null;
@@ -68,9 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             logger.info("Invalid Header Value !! ");
         }
 
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
 
             //fetch user detail from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
@@ -86,13 +85,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } else {
                 logger.info("Validation fails !!");
             }
-
-
         }
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            logger.error(String.valueOf(e));
+            logger.error("error while creatung filter chain for jwt auth.");
         }
 
 

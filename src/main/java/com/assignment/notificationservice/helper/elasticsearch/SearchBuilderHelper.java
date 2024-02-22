@@ -26,9 +26,8 @@ public final class SearchBuilderHelper {
             final QueryBuilder dateQuery = getQueryBuilder("createdAt", dto.getFrom(), dto.getTo());
 
             final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
-                    .must(searchQuery)
-                    .must(dateQuery);
-
+                    .should(searchQuery)
+                    .should(dateQuery);
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .from(from)
@@ -51,8 +50,6 @@ public final class SearchBuilderHelper {
             return null;
         }
     }
-
-
 
     private static QueryBuilder getQueryBuilder(final SearchRequestDTO dto) {
         if (dto == null) {

@@ -53,17 +53,12 @@ class NotificationserviceApplicationTests {
 		SmsRequestIndex expectedSmsRequest = new SmsRequestIndex(id, "2222222222", "message", "status", "12", "failureComments", new Date(101, 1, 2), new Date(101, 1, 2));
 		String sourceJson = "{\"id\":\"1\",\"phoneNumber\":\"2222222222\",\"message\":\"message\",\"status\":\"status\",\"failureCode\":\"12\",\"failureComments\":\"failureComments\",\"createdAt\":\"2002-02-02\",\"updatedAt\":\"2002-02-02\"}";
 
-		// Mock GetResponse
 		GetResponse getResponseMock = mock(GetResponse.class);
 		when(getResponseMock.getSourceAsString()).thenReturn(sourceJson);
-
-		// Mock client.get method
 		when(client.get(any(GetRequest.class), any())).thenReturn(getResponseMock);
 
-		// Call the method to be tested
 		SmsRequestIndex result = smsRequestIndexService.getById(id);
 
-		// Verify the result
 		assertNotNull(result);
 		assertEquals(expectedSmsRequest.getId(), result.getId());
 		assertEquals(expectedSmsRequest.getPhoneNumber(), result.getPhoneNumber());
@@ -76,94 +71,59 @@ class NotificationserviceApplicationTests {
 
 	@Test
 	public void testGetById_NotFound() throws IOException {
-		// Mock data
 		String id = "2";
 
-		// Mock GetResponse with empty source
 		GetResponse getResponseMock = mock(GetResponse.class);
 		when(getResponseMock.isSourceEmpty()).thenReturn(true);
-
-		// Mock client.get method
 		when(client.get(any(GetRequest.class), any())).thenReturn(getResponseMock);
 
-		// Call the method to be tested
 		SmsRequestIndex result = smsRequestIndexService.getById(id);
 
-		// Verify the result
 		assertNull(result);
 	}
 
 	@Test
 	public void testGetById_Exception() throws IOException {
-		// Mock data
 		String id = "3";
 
-		// Mock client.get method to throw IOException
 		when(client.get(any(GetRequest.class), any())).thenThrow(IOException.class);
-
-		// Call the method to be tested
 		SmsRequestIndex result = smsRequestIndexService.getById(id);
 
-		// Verify the result
 		assertNull(result);
 	}
 
 
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// these are the unit tests for indexing:
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Test
-	public void testIndex_Success() throws IOException {
-		// Mock data
+	public void testIndex_Success() throws Exception {
 		SmsRequestIndex smsRequestIndex = new SmsRequestIndex("1", "2222222222", "message", "status", "12", "failureComments", new Date(2002, 1, 2), new Date(2002, 1, 2));
 
-		// Mock response
 		IndexResponse indexResponseMock = mock(IndexResponse.class);
 		when(indexResponseMock.status()).thenReturn(RestStatus.CREATED);
 
-		// Mock client.index method
 		when(client.index(any(IndexRequest.class), any())).thenReturn(indexResponseMock);
 
-		// Call the method to be tested
 		boolean result = smsRequestIndexService.index(smsRequestIndex);
 
-		// Verify the result
 		assertTrue(result);
 	}
 
 	@Test
-	public void testIndex_Failure() throws IOException {
-		// Mock data
-		SmsRequestIndex smsRequestIndex = null; // Invalid object
+	public void testIndex_Failure() throws Exception {
+		SmsRequestIndex smsRequestIndex = null;
 
-		// Call the method to be tested
 		boolean result = smsRequestIndexService.index(smsRequestIndex);
 
-		// Verify the result
 		assertFalse(result);
 	}
 
 	@Test
-	public void testIndex_Exception() throws IOException {
-		// Mock data
+	public void testIndex_Exception() throws Exception {
 		SmsRequestIndex smsRequestIndex = new SmsRequestIndex("1", "2222222222", "message", "status", "12", "failureComments", new Date(2002, 1, 2), new Date(2002, 1, 2));
 
-		// Mock client.index method to throw IOException
 		when(client.index(any(IndexRequest.class), any())).thenThrow(IOException.class);
 
-		// Call the method to be tested
 		boolean result = smsRequestIndexService.index(smsRequestIndex);
 
-		// Verify the result
 		assertFalse(result);
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//these are for searchCreatedsince
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 }

@@ -57,16 +57,16 @@
     </thead>
     <tbody>
     <!-- Iterate over the list of Request objects -->
-    <tr th:each="request : ${result}">
+    <tr th:each="sms : ${result}">
         <!-- Access the ID and Phone Number fields of each Request object -->
-        <td th:text="${request.id}"></td>
-        <td th:text="${request.phoneNumber}"></td>
-        <td th:text="${request.message}"></td>
-        <td th:text="${request.status}"></td>
-        <td th:text="${request.failureCode}"></td>
-        <td th:text="${request.failureComments}"></td>
-        <td th:text="${request.createdAt}"></td>
-        <td th:text="${request.updatedAt}"></td>
+        <td th:text="${sms.id}"></td>
+        <td th:text="${sms.phoneNumber}"></td>
+        <td th:text="${sms.message}"></td>
+        <td th:text="${sms.status}"></td>
+        <td th:text="${sms.failureCode}"></td>
+        <td th:text="${sms.failureComments}"></td>
+        <td th:text="${sms.createdAt}"></td>
+        <td th:text="${sms.updatedAt}"></td>
     </tr>
     </tbody>
 </table>

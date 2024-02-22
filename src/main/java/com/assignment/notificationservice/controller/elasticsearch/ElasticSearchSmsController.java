@@ -1,7 +1,7 @@
 package com.assignment.notificationservice.controller.elasticsearch;
 
-import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.constants.elasticsearch.ElasticsearchConstants;
+import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
 import com.assignment.notificationservice.service.elasticsearch.ElasticSearchSmsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +14,10 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -36,7 +34,7 @@ public class ElasticSearchSmsController {
     }
 
     @PostMapping("/")
-    public void index(@RequestBody SmsRequestIndex smsRequestIndex) throws IOException{
+    public void index(@RequestBody SmsRequestIndex smsRequestIndex) throws Exception{
         elasticSearchSmsService.index(smsRequestIndex);
     }
 
@@ -49,9 +47,10 @@ public class ElasticSearchSmsController {
     public List<SmsRequestIndex> search(@RequestBody SearchRequestDTO dto) throws IOException{
         return elasticSearchSmsService.search(dto);
     }
+
     @GetMapping("/")
     public List<SmsRequestIndex> getAllDocs(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "1000") int size) throws IOException {
+                                            @RequestParam(defaultValue = "10") int size) throws IOException {
         List<SmsRequestIndex> allDocs = new ArrayList<>();
             SearchRequest searchRequest = new SearchRequest(ElasticsearchConstants.SMS_INDEX);
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();

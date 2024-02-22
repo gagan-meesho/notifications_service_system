@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.kafka.common.protocol.types.Field;
-import org.springframework.stereotype.Component;
 
 @NoArgsConstructor
 @AllArgsConstructor
