@@ -23,11 +23,11 @@ public class GlobalExceptions {
     }
     @ExceptionHandler(BadRequestErrorException.class)
     public ResponseEntity<String> handleBadRequestErrorException(BadRequestErrorException ex){
-        return ResponseEntity.badRequest().body("Recieved a bad request from the client.");
+        return ResponseEntity.badRequest().body(ex.getMessage().isEmpty()?"Received bad request from client.":ex.getMessage());
     }
      @ExceptionHandler(CustomException.class)
     public ResponseEntity<String> handleCustomException(CustomException ex){
-        return ResponseEntity.status(69).body(ex.getMessage());
+        return ResponseEntity.status(900).body(ex.getMessage());
     }
     @ExceptionHandler(CustomIOException.class)
     public ResponseEntity<String> handleCustomIOException(CustomIOException ex){
