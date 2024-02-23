@@ -49,6 +49,7 @@ public class ElasticSearchSmsController {
                 return "Invalid sort by field ";
             }
         }
+        if(searchRequestDTO.getFrom().getTime()>searchRequestDTO.getTo().getTime())return "Invalid from, to dates.";
         return null;
     }
     @Autowired
