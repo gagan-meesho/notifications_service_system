@@ -3,6 +3,7 @@ package com.assignment.notificationservice.controller.elasticsearch;
 import com.assignment.notificationservice.constants.elasticsearch.ElasticsearchConstants;
 import com.assignment.notificationservice.dto.requestDTO.elasticsearch.SearchRequestDTO;
 import com.assignment.notificationservice.entity.elasticsearch.SmsRequestIndex;
+import com.assignment.notificationservice.exception.BadRequestErrorException;
 import com.assignment.notificationservice.service.elasticsearch.ElasticSearchSmsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.SearchRequest;
@@ -17,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/v1/elasticsearch/")
@@ -28,6 +28,29 @@ public class ElasticSearchSmsController {
     private final ElasticSearchSmsService elasticSearchSmsService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    public String validate(SearchRequestDTO searchRequestDTO){
+        if (searchRequestDTO.getPage()<0)
+            return "Page invalid";
+        if(searchRequestDTO.getSize()<=0)
+            return "Size Invalid.";
+        Set<String> allowedValues = new HashSet<>(Arrays.asList(
+                "id", "phoneNumber", "message", "status",
+                "failureCode", "failureComments", "createdAt", "updatedAt"
+        ));
+
+        for (String field : searchRequestDTO.getFields()) {
+            if (!allowedValues.contains(field)) {
+                String s = "Invalid field " + field;
+                return s;
+            }
+        }
+        if(!Objects.isNull(searchRequestDTO.getSortBy())){
+            if (!allowedValues.contains(searchRequestDTO.getSortBy())) {
+                return "Invalid sort by field ";
+            }
+        }
+        return null;
+    }
     @Autowired
     public ElasticSearchSmsController(ElasticSearchSmsService elasticSearchSmsService) {
         this.elasticSearchSmsService = elasticSearchSmsService;
@@ -44,7 +67,10 @@ public class ElasticSearchSmsController {
     }
 
     @PostMapping("/search")
-    public List<SmsRequestIndex> search(@RequestBody SearchRequestDTO dto) throws IOException{
+    public List<SmsRequestIndex> search(@RequestBody SearchRequestDTO dto) throws Exception{
+        String ans=validate(dto);
+        if(!Objects.isNull(ans))
+            throw new BadRequestErrorException(ans);
         return elasticSearchSmsService.search(dto);
     }
 
@@ -52,22 +78,22 @@ public class ElasticSearchSmsController {
     public List<SmsRequestIndex> getAllDocs(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size) throws IOException {
         List<SmsRequestIndex> allDocs = new ArrayList<>();
-            SearchRequest searchRequest = new SearchRequest(ElasticsearchConstants.SMS_INDEX);
-            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-            sourceBuilder.from(page * size);
-            sourceBuilder.size(size);
-            sourceBuilder.query(QueryBuilders.matchAllQuery());
+        SearchRequest searchRequest = new SearchRequest(ElasticsearchConstants.SMS_INDEX);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.from(page * size);
+        sourceBuilder.size(size);
+        sourceBuilder.query(QueryBuilders.matchAllQuery());
 
-            searchRequest.source(sourceBuilder);
+        searchRequest.source(sourceBuilder);
 
-            SearchResponse searchResponse = client.search(searchRequest, RequestOptions
-                    .DEFAULT);
-            SearchHits searchHits = searchResponse.getHits();
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions
+                .DEFAULT);
+        SearchHits searchHits = searchResponse.getHits();
 
-            for (SearchHit hit : searchHits.getHits()) {
-                SmsRequestIndex smsRequestIndex = objectMapper.readValue(hit.getSourceAsString(), SmsRequestIndex.class);
-                allDocs.add(smsRequestIndex);
-            }
+        for (SearchHit hit : searchHits.getHits()) {
+            SmsRequestIndex smsRequestIndex = objectMapper.readValue(hit.getSourceAsString(), SmsRequestIndex.class);
+            allDocs.add(smsRequestIndex);
+        }
         return allDocs;
     }
 }

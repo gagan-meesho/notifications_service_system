@@ -45,7 +45,6 @@ public class ElasticSearchSmsService {
 
     private List<SmsRequestIndex> searchInternal(final SearchRequest request)  {
         if (Objects.isNull(request)) {
-            log.error("Failed to build search request");
             return Collections.emptyList();
         }
         try {
@@ -58,41 +57,33 @@ public class ElasticSearchSmsService {
                         mapper.readValue(hit.getSourceAsString(), SmsRequestIndex.class)
                 );
             }
-
             return result;
         } catch (IOException ex) {
             throw new CustomIOException("IO exception occured in elastic search");
         }
-
     }
 
     public Boolean index(SmsRequestIndex smsRequestIndex) throws Exception {
 
             if (smsRequestIndex == null) {
-                log.error("SmsRequestIndex is null.");
                 return false;
             }
             final String smsRequestAsString = mapper.writeValueAsString(smsRequestIndex);
             if (smsRequestAsString == null) {
-                log.error("Failed to convert SmsRequestIndex to JSON.");
                 return false;
             }
-
-
             final IndexRequest request = new IndexRequest(ElasticsearchConstants.SMS_INDEX);
             request.id(String.valueOf(smsRequestIndex.getId()));
             request.source(smsRequestAsString, XContentType.JSON);
-
         try {
             client.index(request, RequestOptions.DEFAULT);
-
             return true;
         }catch (Exception e){
             log.error("exception occured while indexing.");
             return false;
         }
     }
-    
+
     public SmsRequestIndex getById(String id) {
         try {
             final GetResponse documentFields = client.get(

@@ -44,7 +44,7 @@ public class BlacklistedNumbersController {
     public ResponseEntity<BlacklistedNumbersResponseDTO> findAllBlacklistedNumbers() throws RedisInteralServerErrorException {
         try {
             List<String> result = redisTemplate.opsForHash().values(KEY);
-            log.debug("Retrieved {} blacklisted numbers successfully", result.size());
+            log.info("Retrieved {} blacklisted numbers successfully", result.size());
             return ResponseEntity.ok(new BlacklistedNumbersResponseDTO(result));
         } catch (Exception e) {
             log.error("Error occurred while retrieving blacklisted numbers from redis");

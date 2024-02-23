@@ -26,8 +26,8 @@ public final class SearchBuilderHelper {
             final QueryBuilder dateQuery = getQueryBuilder("createdAt", dto.getFrom(), dto.getTo());
 
             final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
-                    .should(searchQuery)
-                    .should(dateQuery);
+                    .must(searchQuery)
+                    .must(dateQuery);
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .from(from)
@@ -63,7 +63,7 @@ public final class SearchBuilderHelper {
 
         if (fields.size() > 1) {
             final MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(dto.getSearchTerm())
-                    .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
+                    .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
                     .operator(Operator.OR);
 
             fields.forEach(queryBuilder::field);
